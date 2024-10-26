@@ -1,0 +1,14 @@
+version: '3'
+
+tasks:
+  start-infra:
+    cmd: "docker compose -f deployment/compose/infra.yml up -d"
+
+  stop-infra:
+    cmd: "docker compose -f deployment/compose/infra.yml down"
+
+  restart-infra:
+    cmds:
+      - task: stop-infra
+      - "timeout 3"
+      - task: start-infra
