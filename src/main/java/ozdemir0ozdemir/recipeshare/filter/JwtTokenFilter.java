@@ -54,7 +54,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 
     private String getJwt(HttpServletRequest request) {
         String authorizationHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
-
+        log.trace("Auth Header Check: {}", authorizationHeader);
         if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
             log.trace("There is no Bearer Token in the authorization header. Jwt filter will not work");
             return "";

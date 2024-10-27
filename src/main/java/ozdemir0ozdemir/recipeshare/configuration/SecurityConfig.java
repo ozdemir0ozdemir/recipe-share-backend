@@ -3,6 +3,7 @@ package ozdemir0ozdemir.recipeshare.configuration;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -13,8 +14,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import ozdemir0ozdemir.recipeshare.filter.JwtTokenFilter;
 import ozdemir0ozdemir.recipeshare.service.JwtService;
 
@@ -22,7 +23,7 @@ import java.time.Duration;
 
 @Configuration
 @RequiredArgsConstructor
-public class SecurityConfig {
+public class SecurityConfig implements WebMvcConfigurer {
 
     private final ApplicationProperties properties;
     private final JwtService jwtService;
@@ -44,8 +45,8 @@ public class SecurityConfig {
         // Authorize Requests
         http.authorizeHttpRequests(this.authorizeHttpRequests());
 
-        // Cors Configuration
-        http.cors(cors -> cors.configurationSource(this.corsConfigurationSource()));
+        http.cors(Customizer.withDefaults());
+
 
         // Activate Basic Authentication
         http.httpBasic(AbstractHttpConfigurer::disable);
@@ -59,18 +60,12 @@ public class SecurityConfig {
         return http.build();
     }
 
-    private CorsConfigurationSource corsConfigurationSource() {
-        return request -> {
-            var configuration = new CorsConfiguration();
-            configuration.addAllowedOrigin("http://localhost:4200");
-            configuration.setMaxAge(Duration.ofHours(1L));
-            return configuration;
-        };
-    }
+
     private Customizer<AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry>
     authorizeHttpRequests() {
         return request -> {
-            for(String pattern: properties.getAuthenticatedServletPaths()){
+            request.requestMatchers(HttpMethod.GET).permitAll();
+            for (String pattern : properties.getAuthenticatedServletPaths()) {
                 request.requestMatchers(pattern).authenticated();
             }
 
@@ -78,5 +73,12 @@ public class SecurityConfig {
         };
     }
 
-
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        WebMvcConfigurer.super.addCorsMappings(registry);
+        registry.addMapping("/**")
+                .allowedOrigins("http://localhost:4200")
+                .allowedMethods("*")
+                .maxAge(Duration.ofHours(1L).toMillis());
+    }
 }
