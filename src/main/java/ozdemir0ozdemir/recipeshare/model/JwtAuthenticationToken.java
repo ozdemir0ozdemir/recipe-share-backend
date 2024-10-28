@@ -10,6 +10,7 @@ public class JwtAuthenticationToken implements Authentication {
     private boolean authenticated = false;
     private String email;
     private String password;
+    private User user;
     private List<GrantedAuthority> authorities;
 
     private JwtAuthenticationToken(String email) {
@@ -19,20 +20,23 @@ public class JwtAuthenticationToken implements Authentication {
     }
 
     private JwtAuthenticationToken(
-                                   String email,
-                                   List<GrantedAuthority> authorities) {
+            String email,
+            User authenticatedUser,
+            List<GrantedAuthority> authorities) {
         this.email = email;
+        this.user = authenticatedUser;
         this.authorities = authorities;
         this.setAuthenticated(true);
     }
 
-    public static JwtAuthenticationToken unauthenticated(String email){
+    public static JwtAuthenticationToken unauthenticated(String email) {
         return new JwtAuthenticationToken(email);
     }
 
     public static JwtAuthenticationToken authenticated(String email,
-                                                       List<GrantedAuthority> authorities){
-        return new JwtAuthenticationToken(email, authorities);
+                                                       User authenticatedUser,
+                                                       List<GrantedAuthority> authorities) {
+        return new JwtAuthenticationToken(email, authenticatedUser, authorities);
     }
 
 
@@ -48,13 +52,13 @@ public class JwtAuthenticationToken implements Authentication {
 
     @Override
     public String getDetails() {
-        // FIXME: JwtAuthenticationToken: getDetails ?
-        return "";
+        // TODO: may be it is a request id
+        return "What should i return?";
     }
 
     @Override
-    public String getPrincipal() {
-        return this.email;
+    public User getPrincipal() {
+        return this.user;
     }
 
     @Override

@@ -45,8 +45,8 @@ public class SecurityConfig implements WebMvcConfigurer {
         // Authorize Requests
         http.authorizeHttpRequests(this.authorizeHttpRequests());
 
+        // Cors with defaults
         http.cors(Customizer.withDefaults());
-
 
         // Activate Basic Authentication
         http.httpBasic(AbstractHttpConfigurer::disable);
@@ -59,7 +59,6 @@ public class SecurityConfig implements WebMvcConfigurer {
 
         return http.build();
     }
-
 
     private Customizer<AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry>
     authorizeHttpRequests() {

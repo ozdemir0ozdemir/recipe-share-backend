@@ -39,9 +39,6 @@ public class Recipe {
     @JoinColumn(name = "user_id", referencedColumnName = "user_id", updatable = false, nullable = false)
     private User user;
 
-    // TODO: Recipe: Recipe Likes
-//    private List<Integer> likes = new ArrayList<>();
-
     @CreationTimestamp
     @Column(name = "created_at", updatable = false, nullable = false)
     private LocalDateTime createdAt;
