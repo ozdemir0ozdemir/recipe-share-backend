@@ -3,6 +3,7 @@ package ozdemir0ozdemir.recipeshare.controller;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +19,7 @@ import ozdemir0ozdemir.recipeshare.response.Response;
 import ozdemir0ozdemir.recipeshare.service.UserService;
 
 import java.util.Set;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/users")

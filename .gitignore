@@ -4,6 +4,8 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
+deployment/compose/elasticsearch
+
 ### STS ###
 .apt_generated
 .classpath

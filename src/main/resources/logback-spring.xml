@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration>
+<configuration scan="true">
+    <springProperty scope="context" name="springAppName" source="spring.application.name"/>
+    <springProperty scope="context" name="springAppVersion" source="spring.application.version"/>
+    <contextName>${springAppName}</contextName>
+
+    <included resource="org/springframework/boot/logging/logback/base.xml"/>
+    <appender name="logstash" class="net.logstash.logback.appender.LogstashAccessTcpSocketAppender">
+        <destination>localhost:5000</destination>
+        <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
+            <providers>
+                <timestamp>
+                    <fieldName>Timestamp/UTC</fieldName>
+                    <timeZone>UTC</timeZone>
+                </timestamp>
+                <logLevel>
+                    <fieldName>Level</fieldName>
+                </logLevel>
+                <threadName>
+                    <fieldName>Thread</fieldName>
+                </threadName>
+                <contextName>
+                    <fieldName>ServiceName</fieldName>
+                </contextName>
+                <mdc>
+                    <fieldName>RID</fieldName>
+                </mdc>
+<!--                <arguments>-->
+<!--                    <includeNonStructuredArguments>true</includeNonStructuredArguments>-->
+<!--                </arguments>-->
+                <loggerName>
+                    <fieldName>Logger</fieldName>
+                </loggerName>
+                <message>
+                    <fieldName>Message</fieldName>
+                </message>
+            </providers>
+        </encoder>
+    </appender>
+
+    <root level="info">
+        <appender-ref ref="logstash"/>
+    </root>
+</configuration>

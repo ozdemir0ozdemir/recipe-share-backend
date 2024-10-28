@@ -10,5 +10,17 @@ tasks:
   restart-infra:
     cmds:
       - task: stop-infra
-      - "timeout 3"
+      - "timeout 2"
       - task: start-infra
+
+  start-elk:
+    cmd: "docker compose -f deployment/compose/elk.yml up -d"
+
+  stop-elk:
+    cmd: "docker compose -f deployment/compose/elk.yml down"
+
+  restart-elk:
+    cmds:
+      - task: stop-elk
+      - "timeout 2"
+      - task: start-elk
