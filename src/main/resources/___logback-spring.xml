@@ -26,9 +26,6 @@
                 <mdc>
                     <fieldName>RID</fieldName>
                 </mdc>
-<!--                <arguments>-->
-<!--                    <includeNonStructuredArguments>true</includeNonStructuredArguments>-->
-<!--                </arguments>-->
                 <loggerName>
                     <fieldName>Logger</fieldName>
                 </loggerName>

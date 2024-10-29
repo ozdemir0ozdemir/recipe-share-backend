@@ -24,3 +24,16 @@ tasks:
       - task: stop-elk
       - "timeout 2"
       - task: start-elk
+
+
+  start-monitoring:
+    cmd: "docker compose -f deployment/compose/monitor.yml up -d"
+
+  stop-monitoring:
+    cmd: "docker compose -f deployment/compose/monitor.yml down"
+
+  restart-monitoring:
+    cmds:
+      - task: stop-monitoring
+      - "timeout 2"
+      - task: start-monitoring

@@ -1,0 +1,8 @@
+scrape_configs:
+  - job_name: 'recipe-share-metrics'
+    metrics_path: 'api/v1/actuator/prometheus'
+    scrape_interval: 3s
+    static_configs:
+      - targets: ['host.docker.internal:8080']
+        labels:
+          application: 'Recipe Share Application'
