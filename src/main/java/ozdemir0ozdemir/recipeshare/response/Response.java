@@ -11,7 +11,6 @@ import lombok.Getter;
 @Getter
 public class Response<T> {
 
-    @JsonUnwrapped
     private T data;
     private String message;
     private ResponseStatus status;

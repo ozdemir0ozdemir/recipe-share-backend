@@ -10,6 +10,7 @@ create table users
     constraint unique_user_email unique (email)
 );
 
+-- password = $2a$12$lfSZu/Q5dDO0cj7bjmTHeuQc8qvTT5FK4xO6n.aNbxLKiRTQoQ1PS
 insert into users(full_name, email, password)
-values ('Özdemir Özdemir', 'ozdemirozdemir@hotmail.com.tr', '$2a$12$lfSZu/Q5dDO0cj7bjmTHeuQc8qvTT5FK4xO6n.aNbxLKiRTQoQ1PS'),
-       ('Oğuz Albayrak', 'oguzalbayrak@hotmail.com.tr', '$2a$12$lfSZu/Q5dDO0cj7bjmTHeuQc8qvTT5FK4xO6n.aNbxLKiRTQoQ1PS');
+values ('SpringFramework User', 'info@spring.com', '$2a$12$lfSZu/Q5dDO0cj7bjmTHeuQc8qvTT5FK4xO6n.aNbxLKiRTQoQ1PS'),
+       ('Angular User', 'info@angular.com', '$2a$12$lfSZu/Q5dDO0cj7bjmTHeuQc8qvTT5FK4xO6n.aNbxLKiRTQoQ1PS');

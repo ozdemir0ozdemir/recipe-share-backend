@@ -81,10 +81,10 @@ public class RecipeService {
         log.info("Delete recipe invoked for recipe id: {}", recipeId);
 
         this.findByIdForAdminOrAuthenticatedUser(recipeId)
-                .ifPresent(recipe -> {
+                .ifPresentOrElse(recipe -> {
                     log.info("Recipe deleted with id: {}", recipe.getId());
                     this.repository.deleteById(recipeId);
-                });
+                }, () -> log.info("Recipe cannot deleted with id: {}", recipeId));
     }
 
     private User getAuthenticatedUser() {

@@ -15,7 +15,6 @@ import java.util.Collection;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class PagedResponse<T> {
 
-    @JsonUnwrapped
     private Response<T> response;
 
     private int page;
