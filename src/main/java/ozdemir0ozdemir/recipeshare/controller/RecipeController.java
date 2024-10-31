@@ -1,5 +1,7 @@
 package ozdemir0ozdemir.recipeshare.controller;
 
+import io.github.resilience4j.ratelimiter.RequestNotPermitted;
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,6 +30,7 @@ class RecipeController {
     private static final Logger log = LoggerFactory.getLogger(RecipeController.class);
     private final RecipeService service;
 
+    @RateLimiter(name = "basic", fallbackMethod = "rateLimited")
     @GetMapping
     ResponseEntity<PagedResponse<Set<RecipeDto>>> getAllRecipes(@RequestParam(defaultValue = "1") int page,
                                                                 @RequestParam(defaultValue = "5") int pageSize) {
@@ -44,6 +47,11 @@ class RecipeController {
         }
 
         return ResponseEntity.ok(PagedResponse.of(pages.toSet(), pages, "Recipes found"));
+    }
+
+    ResponseEntity<PagedResponse<Set<RecipeDto>>> rateLimited(int page, int pageSize, RequestNotPermitted requestNotPermitted) {
+        log.error("Rate Limited: ",requestNotPermitted);
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/{recipeId}")

@@ -3,6 +3,7 @@ package ozdemir0ozdemir.recipeshare.dto;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.springframework.lang.NonNull;
 import ozdemir0ozdemir.recipeshare.model.Recipe;
 
 import java.time.LocalDateTime;
@@ -18,7 +19,7 @@ public class RecipeDto {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    public static RecipeDto from(Recipe recipe) {
+    public static RecipeDto from(@NonNull Recipe recipe) {
         return new RecipeDto(
                 recipe.getTitle(),
                 recipe.getImageUrl(),

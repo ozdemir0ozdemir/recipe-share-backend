@@ -14,7 +14,10 @@ tasks:
       - task: start-infra
 
   start-elk:
-    cmd: "docker compose -f deployment/compose/elk.yml up -d"
+    cmds:
+      - "docker compose -f deployment/compose/elk.yml up -d"
+      - "timeout 5"
+      - task: add-kibana-user
 
   stop-elk:
     cmd: "docker compose -f deployment/compose/elk.yml down"
@@ -25,6 +28,9 @@ tasks:
       - "timeout 2"
       - task: start-elk
 
+  add-kibana-user:
+    cmds:
+      - "docker exec -it elasticsearch-rs ./bin/elasticsearch-users useradd kibana-user -p password -r kibana_system"
 
   start-monitoring:
     cmd: "docker compose -f deployment/compose/monitor.yml up -d"
@@ -37,3 +43,15 @@ tasks:
       - task: stop-monitoring
       - "timeout 2"
       - task: start-monitoring
+
+  start-recipe-app:
+    cmd: "mvnw spring-boot:run"
+
+  start-recipe-all:
+    cmds:
+      - "docker compose -f deployment/compose/all.yml up -d"
+      - "timeout 3"
+      - task: add-kibana-user
+      - task: start-recipe-app
+
+

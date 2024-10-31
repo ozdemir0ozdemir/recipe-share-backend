@@ -4,12 +4,12 @@ import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.MDC;
-import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 
 import java.io.IOException;
 import java.util.UUID;
 
+// Since using of micrometer-tracing-bridge-otel lib
+@Deprecated
 //@Component
 public class MDCFilter implements Filter {
 
@@ -18,13 +18,10 @@ public class MDCFilter implements Filter {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
 
-        String requestId = request.getRequestId();
+        String requestId = UUID.randomUUID().toString();
 
-        if (!StringUtils.hasText(requestId)) {
-            requestId = UUID.randomUUID().toString();
-        }
         MDC.put("requestId", requestId);
-        response.setHeader("requestId", requestId);
+//        response.setHeader("request-id", requestId);
 
         try{
             filterChain.doFilter(request, response);

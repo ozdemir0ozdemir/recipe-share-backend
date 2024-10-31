@@ -6,10 +6,13 @@
     <contextName>${springAppName}</contextName>
 
     <included resource="org/springframework/boot/logging/logback/base.xml"/>
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+    <include resource="org/springframework/boot/logging/logback/console-appender.xml" />
     <appender name="logstash" class="net.logstash.logback.appender.LogstashAccessTcpSocketAppender">
         <destination>localhost:5000</destination>
         <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
             <providers>
+                <mdc/>
                 <timestamp>
                     <fieldName>Timestamp/UTC</fieldName>
                     <timeZone>UTC</timeZone>
@@ -23,9 +26,6 @@
                 <contextName>
                     <fieldName>ServiceName</fieldName>
                 </contextName>
-                <mdc>
-                    <fieldName>RID</fieldName>
-                </mdc>
                 <loggerName>
                     <fieldName>Logger</fieldName>
                 </loggerName>
@@ -38,5 +38,6 @@
 
     <root level="info">
         <appender-ref ref="logstash"/>
+        <appender-ref ref="CONSOLE" />
     </root>
 </configuration>

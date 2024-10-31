@@ -1,6 +1,42 @@
-name: 'logging-monitoring-elk'
+name: 'recipe-app-all'
 
 services:
+  recipe-share-db:
+    image: postgres:16-alpine
+    container_name: recipe-share-db
+    environment:
+      - PGUSER=recipe_user                # SETS USERNAME FOR DEFAULT PSQL CONNECTION
+      - PGDATABASE=recipe_db              # SETS DATABASE FOR DEFAULT PSQL CONNECTION
+      - POSTGRES_DB=recipe_db             # CREATES A TABLE
+      - POSTGRES_USER=recipe_user         # CREATES THE DEFAULT USER
+      - POSTGRES_PASSWORD=recipe_secret   # APPLIES PASSWORD TO THE DEFAULT USER
+    ports:
+      - "15432:5432"
+    healthcheck:
+      test: [ "CMD-SHELL", "sh -c pg_isready -U ${POSTGRES_USER} -d" ]
+      interval: "10s"
+      timeout: "3s"
+      retries: 5
+
+  prometheus:
+    image: prom/prometheus:v2.44.0
+    container_name: prometheus
+    ports:
+      - 9090:9090
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  grafana:
+    image: grafana/grafana:9.5.2
+    container_name: grafana
+    ports:
+      - 3000:3000
+    restart: unless-stopped
+    volumes:
+      - ./grafana/provisioning/datasources:/etc/grafana/provisioning/datasources
+
   elasticsearch-rs:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.0.0
     container_name: elasticsearch-rs
